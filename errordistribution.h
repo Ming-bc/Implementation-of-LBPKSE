@@ -1,6 +1,6 @@
-#pragma once
-#pragma once
-#pragma once
+ï»¿#pragma once
+#ifndef ERRODISTRIBUTION_H_
+#define ERRODISTRIBUTION_H_
 #include <iostream>  
 #include <time.h>  
 #include <iomanip>  
@@ -12,47 +12,16 @@
 NTL_CLIENT
 
 using namespace std;
-void UNIFORM(double *);  //UINFORMº¯ÊıÉùÃ÷  
 
-int x = 0;   //ÕâÀï¶¨ÒåxÒ»¸öÈ«¾Ö±äÁ¿²¢ÇÒ³õÊ¼¸¶Öµ0£¬Õâ¸öµÄ¹¦ÓÃ½«»áÔÚ×Óº¯ÊıUNIFORMÖĞµÃÒÔÌåÏÖ  
-int round_double(double number)
-{
-	return (number > 0.0) ? floor(number + 0.5) : ceil(number - 0.5);
-}
+int ErrordistributionX = 0;   //è¿™é‡Œå®šä¹‰xä¸€ä¸ªå…¨å±€å˜é‡å¹¶ä¸”åˆå§‹ä»˜å€¼0ï¼Œè¿™ä¸ªçš„åŠŸç”¨å°†ä¼šåœ¨å­å‡½æ•°UNIFORMä¸­å¾—ä»¥ä½“ç°  
 
-void errordistribution(ZZ_p& r2, const ZZ& q)
-{
-	//	int i, j;
-		//ZZ r2;
-	double a, A, B, C, E, D, r1;//
-	double uni[2];
-	double *p;
-	srand((unsigned)time(NULL));  //Ëæ»úÊıÖÖ×Ó²ÉÓÃÏµÍ³Ê±ÖÓ  
-	a = 0.05;
-	E = 0;
-	D = (a / sqrt(2 * PI))*(a / sqrt(2 * PI));           //theta µÄÆ½·½
-	ZZ_p::init(q);
-
-	UNIFORM(&uni[0]);  //µ÷ÓÃUNIFORMº¯Êı²úÉú2¸ö¾ùÔÈ·Ö²¼µÄËæ»úÊı²¢´æÈëÊı×énui[2]  
-	A = sqrt((-2)*log(uni[0]));
-	B = 2 * PI*uni[1];
-	C = A * cos(B);
-	r1 = E + C * D;    //E,D·Ö±ğÊÇÆÚÍûºÍ·½²î  
-	if (isinf(r1) == 0)                            //inf Ò»¸ö¼¯ºÏ×îĞ¡µÄÏÂ½ç
-	{
-		r2 = to_ZZ_p(round(to_double(q)*r1));
-	}
-	//	r2 = r1;
-		//round
-		//rem( r,  r2,q);
-}
 void UNIFORM(double *p)
 {
 	int i, a;
 	double f;
-	for (i = 0; i < 2; i++, x = x + 689)
+	for (i = 0; i < 2; i++, ErrordistributionX = ErrordistributionX + 689)
 	{
-		a = rand() + x;  //¼ÓÉÏ689ÊÇÒòÎªÏµÍ³²úÉúËæ»úÊıµÄ¸ü»»ÆµÂÊÔ¶Ô¶²»¼°³ÌĞòµ÷ÓÃº¯ÊıµÄÊ±¼ä  
+		a = rand() + ErrordistributionX;  //åŠ ä¸Š689æ˜¯å› ä¸ºç³»ç»Ÿäº§ç”Ÿéšæœºæ•°çš„æ›´æ¢é¢‘ç‡è¿œè¿œä¸åŠç¨‹åºè°ƒç”¨å‡½æ•°çš„æ—¶é—´  
 		a = a % 1000;
 		f = (double)a;
 		f = f / 1000.0;
@@ -60,4 +29,35 @@ void UNIFORM(double *p)
 		p++;
 	}
 }
+
+int round_double(double number)
+{
+	return (number > 0.0) ? floor(number + 0.5) : ceil(number - 0.5);
+}
+
+void errordistribution(ZZ_p& r2, const ZZ& q)
+{
+//	int i, j;
+	//ZZ r2;
+	double a, A, B, C, E, D, r1;//
+	double uni[2];
+	double *p;
+	srand((unsigned)time(NULL));  //éšæœºæ•°ç§å­é‡‡ç”¨ç³»ç»Ÿæ—¶é’Ÿ  
+	a = 0.05;
+	E = 0;
+	D = (a / sqrt(2 * PI))*(a / sqrt(2 * PI));           //theta çš„å¹³æ–¹
+	ZZ_p::init(q);
+
+	UNIFORM(&uni[0]);  //è°ƒç”¨UNIFORMå‡½æ•°äº§ç”Ÿ2ä¸ªå‡åŒ€åˆ†å¸ƒçš„éšæœºæ•°å¹¶å­˜å…¥æ•°ç»„nui[2]  
+	A = sqrt((-2)*log(uni[0]));
+	B = 2 * PI*uni[1];
+	C = A * cos(B);
+	r1 = E + C * D;    //E,Dåˆ†åˆ«æ˜¯æœŸæœ›å’Œæ–¹å·®  
+	if (isinf(r1) == 0)                            //inf ä¸€ä¸ªé›†åˆæœ€å°çš„ä¸‹ç•Œ
+	{
+		r2 = to_ZZ_p(round(to_double(q)*r1));
+	}
+}
+
+#endif
 
